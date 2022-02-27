@@ -1,0 +1,54 @@
+module terminator-2 {
+
+    yang-version "1";
+    namespace "https://example.com/terminator-2";
+
+    prefix "terminator-2";
+
+    identity FRACTION {
+      description "Типп/группа";
+    }
+
+    identity HUMAN {
+      base FRACTION;
+      description "Человек";
+    }
+
+    identity MACHINE {
+      base FRACTION;
+      description "Машина";
+    }
+
+    typedef age {
+      type uint16 {
+        range 1..150;
+      }
+    }
+    grouping personal-data {
+        leaf name {
+            type string;
+        }
+        
+        leaf age {
+            type age;
+        }
+        
+        leaf fraction {
+            type identityref {
+                base terminator-2:FRACTION;
+            }
+        }
+
+        leaf model {
+          when "../fraction = MACHINE";
+          type string;
+        }
+    }
+
+    container universe {
+        list individual {
+            key "name";
+            uses personal-data;
+        }
+    }
+}
